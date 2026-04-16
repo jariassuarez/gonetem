@@ -536,16 +536,24 @@ func (t *NetemTopologyManager) Run(progressCh chan TopologyRunCloseProgressT) ([
 		return nodeMessages, err
 	}
 
-	// 3 - create links
+	// 3 - create links concurrently, one goroutine per source node group
 	t.logger.Debug("Topo/Run: setup links")
-	for _, l := range t.links {
-		if err := t.setupLink(l, false); err != nil {
-			return nodeMessages, err
-		}
-
-		if progressCh != nil {
-			progressCh <- TopologyRunCloseProgressT{Code: SETUP_LINK}
-		}
+	for _, group := range groupLinksBySourceNode(t.links) {
+		group := group
+		g.Go(func() error {
+			for _, l := range group {
+				if err := t.setupLink(l, false); err != nil {
+					return err
+				}
+				if progressCh != nil {
+					progressCh <- TopologyRunCloseProgressT{Code: SETUP_LINK}
+				}
+			}
+			return nil
+		})
+	}
+	if err := g.Wait(); err != nil {
+		return nodeMessages, err
 	}
 
 	// 4 - create bridges
@@ -566,6 +574,9 @@ func (t *NetemTopologyManager) Run(progressCh chan TopologyRunCloseProgressT) ([
 	}
 
 	// 5 - load configs
+	// We ignore node config, we do it ourselves manually after project start
+	/*
+
 	t.logger.Debug("Topo/Run: load configuration")
 	timeout := options.ServerConfig.Docker.Timeoutop
 	configPath := path.Join(t.path, configDir)
@@ -595,6 +606,8 @@ func (t *NetemTopologyManager) Run(progressCh chan TopologyRunCloseProgressT) ([
 	if err := g.Wait(); err != nil {
 		return nodeMessages, err
 	}
+
+	*/
 
 	t.running = true
 	return nodeMessages, nil
@@ -689,6 +702,18 @@ func (t *NetemTopologyManager) setupMgntLink(node *NetemNode) error {
 	node.Instance.AttachMgntInterface(peerIfname, peerNetns, node.Config.Mgnt.Address)
 
 	return nil
+}
+
+// groupLinksBySourceNode groups links by the name of their Peer1 node.
+// Each group contains all links where that node is the source peer, allowing
+// concurrent dispatch of one goroutine per group without namespace conflicts.
+func groupLinksBySourceNode(links []*NetemLink) map[string][]*NetemLink {
+	groups := make(map[string][]*NetemLink)
+	for _, l := range links {
+		name := l.Peer1.Node.GetName()
+		groups[name] = append(groups[name], l)
+	}
+	return groups
 }
 
 func (t *NetemTopologyManager) setupLink(l *NetemLink, configure bool) error {

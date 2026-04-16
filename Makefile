@@ -90,6 +90,10 @@ install-amd64: clean build-amd64
 	cp bin/gonetem-console_amd64 ${INSTALLDIR}/gonetem-console
 	mkdir -p ${CONFDIR}
 	cp conf/config.yaml ${CONFDIR}
+	cp conf/gonetem.service /etc/systemd/system/
+	systemctl daemon-reload
+	systemctl enable gonetem.service
+	systemctl start gonetem.service
 
 install-arm64: clean build-arm64
 	@echo "installing gonetem-console/gonetem-server in '${INSTALLDIR}' directory"
@@ -97,6 +101,10 @@ install-arm64: clean build-arm64
 	cp bin/gonetem-console_arm64 ${INSTALLDIR}/gonetem-console
 	mkdir -p ${CONFDIR}
 	cp conf/config.yaml ${CONFDIR}
+	cp conf/gonetem.service /etc/systemd/system/
+	systemctl daemon-reload
+	systemctl enable gonetem.service
+	systemctl start gonetem.service
 
 uninstall:
 	@echo "delete gonetem-console/gonetem-server in '${INSTALLDIR}' directory"

@@ -15,4 +15,10 @@ docker:
       image: mroy31/gonetem-server
     p4sw:
       image: mroy31/gonetem-bmv2
-  extraNodes: []
+  extraNodes:
+   - type: satellite
+     image: jariassuarez/sgnt:satellite
+     volumes: []
+   - type: gndstation
+     image: jariassuarez/sgnt:ground-station
+     volumes: []
