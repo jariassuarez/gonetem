@@ -86,17 +86,22 @@ clean:
 
 install-amd64: clean build-amd64
 	@echo "installing gonetem-console/gonetem-server in '${INSTALLDIR}' directory"
+	systemctl stop gonetem.service || true
 	cp bin/gonetem-server_amd64 ${INSTALLDIR}/gonetem-server
 	cp bin/gonetem-console_amd64 ${INSTALLDIR}/gonetem-console
 	mkdir -p ${CONFDIR}
 	cp conf/config.yaml ${CONFDIR}
 	cp conf/gonetem.service /etc/systemd/system/
+	
 	systemctl daemon-reload
 	systemctl enable gonetem.service
 	systemctl start gonetem.service
+	cp conf/99-custom-network.conf /etc/sysctl.d/
+	sysctl --system
 
 install-arm64: clean build-arm64
 	@echo "installing gonetem-console/gonetem-server in '${INSTALLDIR}' directory"
+	systemctl stop gonetem.service || true
 	cp bin/gonetem-server_arm64 ${INSTALLDIR}/gonetem-server
 	cp bin/gonetem-console_arm64 ${INSTALLDIR}/gonetem-console
 	mkdir -p ${CONFDIR}
@@ -105,6 +110,8 @@ install-arm64: clean build-arm64
 	systemctl daemon-reload
 	systemctl enable gonetem.service
 	systemctl start gonetem.service
+	cp conf/99-custom-network.conf /etc/sysctl.d/
+	sysctl --system
 
 uninstall:
 	@echo "delete gonetem-console/gonetem-server in '${INSTALLDIR}' directory"
@@ -112,6 +119,11 @@ uninstall:
 	rm ${INSTALLDIR}/gonetem-server
 	rm ${CONFDIR}/config.yaml
 	rmdir ${CONFDIR}
+	rm /etc/sysctl.d/99-custom-network.conf
+	sysctl --system
+	rmdir ${CONFDIR}
+
+
 
 test:
 	sudo go test ./...
