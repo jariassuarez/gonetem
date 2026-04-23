@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"sync"
 
 	"github.com/moby/term"
 	"github.com/mroy31/gonetem/internal/docker"
@@ -24,6 +25,7 @@ type OvsNode struct {
 	Running     bool
 	OvsInstance *OvsProjectInstance
 	Interfaces  map[string]link.IfState
+	mu          sync.Mutex
 	Logger      *logrus.Entry
 }
 
@@ -154,7 +156,9 @@ func (o *OvsNode) AttachInterface(ifName string, ifIndex int, configure bool) er
 		}
 	}
 
+	o.mu.Lock()
 	o.Interfaces[ifName] = link.IFSTATE_UP
+	o.mu.Unlock()
 
 	return nil
 }

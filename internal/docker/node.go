@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/google/shlex"
@@ -52,6 +53,7 @@ type DockerNode struct {
 	ShortName      string
 	Config         *options.DockerNodeConfig
 	Interfaces     map[string]*DockerInterface
+	mu             sync.Mutex
 	LocalNetnsName string
 	Running        bool
 	ConfigLoaded   bool
@@ -205,10 +207,13 @@ func (n *DockerNode) prepareInterface(client *DockerClient, ifName string) {
 }
 
 func (n *DockerNode) AttachInterface(ifName string, ifIndex int, configure bool) error {
-	n.Interfaces[ifName] = &DockerInterface{
+	iface := &DockerInterface{
 		Configured: false,
 		State:      link.IFSTATE_UP,
 	}
+	n.mu.Lock()
+	n.Interfaces[ifName] = iface
+	n.mu.Unlock()
 
 	if configure && n.Running {
 		client, err := NewDockerClient()
@@ -218,7 +223,7 @@ func (n *DockerNode) AttachInterface(ifName string, ifIndex int, configure bool)
 		defer client.Close()
 
 		n.prepareInterface(client, ifName)
-		n.Interfaces[ifName].Configured = true
+		iface.Configured = true
 	}
 
 	return nil
