@@ -1080,6 +1080,7 @@ func (t *NetemTopologyManager) Close(progressCh chan TopologyRunCloseProgressT) 
 	t.logger.Infof("Close: phase 1 - killing %d nodes", len(t.nodes))
 	killStart := time.Now()
 	kg := new(errgroup.Group)
+	kg.SetLimit(maxConcurrentNodeTask)
 	for _, node := range t.nodes {
 		kg.Go(func() error {
 			return node.Instance.Kill()
@@ -1094,6 +1095,7 @@ func (t *NetemTopologyManager) Close(progressCh chan TopologyRunCloseProgressT) 
 	t.logger.Infof("Close: phase 2 - removing %d nodes", len(t.nodes))
 	removeStart := time.Now()
 	g := new(errgroup.Group)
+	g.SetLimit(maxConcurrentNodeTask)
 	for _, node := range t.nodes {
 		g.Go(func() error {
 			err := node.Instance.Close()
