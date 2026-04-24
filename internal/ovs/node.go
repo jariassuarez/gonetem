@@ -257,6 +257,10 @@ func (o *OvsNode) Save(dstPath string, timeout int) error {
 	return o.OvsInstance.SaveConfig(o.Name, o.GetBridgeName(), dstPath, timeout)
 }
 
+func (o *OvsNode) Kill() error {
+	return nil
+}
+
 func (o *OvsNode) Close() error {
 	if o.OvsInstance != nil {
 		return o.OvsInstance.DelBr(o.GetBridgeName())

@@ -85,27 +85,39 @@ func (c *DockerClient) List(ctx context.Context, prefix string) ([]NetemContaine
 }
 
 func (c *DockerClient) Get(ctx context.Context, containerId string) (*types.Container, error) {
-	list, err := c.cli.ContainerList(ctx, container.ListOptions{All: true})
+	containerInfo, err := c.cli.ContainerInspect(ctx, containerId)
 	if err != nil {
+		if client.IsErrNotFound(err) {
+			return nil, fmt.Errorf("container with id %s does not exist", containerId)
+		}
 		return nil, err
 	}
 
-	for _, container := range list {
-		if container.ID == containerId {
-			return &container, nil
-		}
+	cSummary := &types.Container{
+		ID:    containerInfo.ID,
+		Names: []string{containerInfo.Name},
+		State: containerInfo.State.Status,
+	}
+	if containerInfo.Config != nil {
+		cSummary.Image = containerInfo.Config.Image
+	}
+	if containerInfo.Image != "" {
+		cSummary.ImageID = containerInfo.Image
+	}
+	if containerInfo.State != nil {
+		cSummary.Status = containerInfo.State.Status
 	}
 
-	return nil, fmt.Errorf("container with id %s does not exist", containerId)
+	return cSummary, nil
 }
 
 func (c *DockerClient) GetState(ctx context.Context, containerId string) (string, error) {
-	container, err := c.Get(ctx, containerId)
+	containerInfo, err := c.cli.ContainerInspect(ctx, containerId)
 	if err != nil {
 		return "", err
 	}
 
-	return container.State, nil
+	return containerInfo.State.Status, nil
 }
 
 func (c *DockerClient) Create(
@@ -154,11 +166,7 @@ func (c *DockerClient) Stop(ctx context.Context, containerId string) error {
 	}
 
 	if state == "running" {
-		timeout := 2
-		return c.cli.ContainerStop(
-			ctx,
-			containerId,
-			container.StopOptions{Timeout: &timeout})
+		return c.cli.ContainerKill(ctx, containerId, "SIGKILL")
 	}
 
 	return nil

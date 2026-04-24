@@ -698,9 +698,31 @@ func (n *DockerNode) SetInterfaceState(ifIndex int, state link.IfState) error {
 	return fmt.Errorf("interface %s.%d not found", n.GetName(), ifIndex)
 }
 
+func (n *DockerNode) Kill() error {
+	if n.ID != "" && n.Running {
+		n.Logger.Info("Kill: starting")
+		start := time.Now()
+
+		client, err := NewDockerClient()
+		if err != nil {
+			return err
+		}
+		defer client.Close()
+
+		ctx := context.Background()
+		if err := client.Stop(ctx, n.ID); err != nil {
+			return err
+		}
+		n.Running = false
+		n.Logger.Infof("Kill: done in %s", time.Since(start))
+	}
+	return nil
+}
+
 func (n *DockerNode) Close() error {
 	if n.ID != "" {
-		n.Logger.Debug("Close node")
+		n.Logger.Info("Close: starting")
+		start := time.Now()
 
 		client, err := NewDockerClient()
 		if err != nil {
@@ -710,21 +732,27 @@ func (n *DockerNode) Close() error {
 
 		ctx := context.Background()
 		if n.Running {
+			n.Logger.Info("Close: stopping container (was not killed)")
+			stopStart := time.Now()
 			client.Stop(ctx, n.ID)
 			n.Running = false
+			n.Logger.Infof("Close: stop done in %s", time.Since(stopStart))
 		}
 
+		n.Logger.Info("Close: removing container")
+		rmStart := time.Now()
 		if err := client.Rm(ctx, n.ID); err != nil {
 			return err
 		}
+		n.Logger.Infof("Close: Rm done in %s", time.Since(rmStart))
 
-		// clean attributes
 		n.ConfigLoaded = false
 		n.Interfaces = make(map[string]*DockerInterface)
 		if n.LocalNetnsName != "" {
 			link.DeleteNetns(n.LocalNetnsName)
 			n.LocalNetnsName = ""
 		}
+		n.Logger.Infof("Close: total done in %s", time.Since(start))
 	}
 
 	return nil

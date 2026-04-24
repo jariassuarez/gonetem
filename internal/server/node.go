@@ -101,6 +101,7 @@ type INetemNode interface {
 	Save(dstPath string, timeout int) error
 	GetInterfacesState() map[string]link.IfState
 	SetInterfaceState(ifIndex int, state link.IfState) error
+	Kill() error
 	Close() error
 }
 

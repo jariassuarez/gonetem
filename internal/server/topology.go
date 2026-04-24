@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/creasty/defaults"
 	"github.com/mroy31/gonetem/internal/link"
@@ -1072,18 +1073,33 @@ func (t *NetemTopologyManager) Close(progressCh chan TopologyRunCloseProgressT) 
 		progressCh <- TopologyRunCloseProgressT{Code: BRIDGE_COUNT, Value: len(t.bridges)}
 	}
 
-	g := new(errgroup.Group)
-	g.SetLimit(maxConcurrentNodeTask)
+	closeStart := time.Now()
+	t.logger.Infof("Close: starting (nodes=%d, bridges=%d)", len(t.nodes), len(t.bridges))
 
-	// close all nodes
+	// phase 1: kill all nodes simultaneously
+	t.logger.Infof("Close: phase 1 - killing %d nodes", len(t.nodes))
+	killStart := time.Now()
+	kg := new(errgroup.Group)
 	for _, node := range t.nodes {
-		node := node
+		kg.Go(func() error {
+			return node.Instance.Kill()
+		})
+	}
+	if err := kg.Wait(); err != nil {
+		t.logger.Errorf("Error when killing nodes: %v", err)
+	}
+	t.logger.Infof("Close: phase 1 done in %s", time.Since(killStart))
+
+	// phase 2: remove all nodes simultaneously
+	t.logger.Infof("Close: phase 2 - removing %d nodes", len(t.nodes))
+	removeStart := time.Now()
+	g := new(errgroup.Group)
+	for _, node := range t.nodes {
 		g.Go(func() error {
 			err := node.Instance.Close()
 			if progressCh != nil {
 				progressCh <- TopologyRunCloseProgressT{Code: CLOSE_NODE}
 			}
-
 			if err != nil {
 				return fmt.Errorf("node %s: %v", node.Instance.GetName(), err)
 			}
@@ -1093,8 +1109,11 @@ func (t *NetemTopologyManager) Close(progressCh chan TopologyRunCloseProgressT) 
 	if err := g.Wait(); err != nil {
 		t.logger.Errorf("Error when closing nodes: %v", err)
 	}
+	t.logger.Infof("Close: phase 2 done in %s", time.Since(removeStart))
 
 	// close all bridges
+	t.logger.Infof("Close: phase 3 - removing %d bridges", len(t.bridges))
+	bridgeStart := time.Now()
 	rootNs := link.GetRootNetns()
 	defer rootNs.Close()
 	for _, br := range t.bridges {
@@ -1116,6 +1135,7 @@ func (t *NetemTopologyManager) Close(progressCh chan TopologyRunCloseProgressT) 
 			progressCh <- TopologyRunCloseProgressT{Code: CLOSE_BRIDGE}
 		}
 	}
+	t.logger.Infof("Close: phase 3 done in %s", time.Since(bridgeStart))
 
 	t.nodes = make([]NetemNode, 0)
 	t.links = make([]*NetemLink, 0)
@@ -1123,19 +1143,26 @@ func (t *NetemTopologyManager) Close(progressCh chan TopologyRunCloseProgressT) 
 	t.IdGenerator.Close()
 
 	// close OVS instance
+	t.logger.Info("Close: closing OVS instance")
+	ovsStart := time.Now()
 	if err := ovs.CloseOvsInstance(t.prjID); err != nil {
 		t.logger.Warnf("Error when closing ovswitch instance: %v", err)
 	}
 	t.ovsInstance = nil
+	t.logger.Infof("Close: OVS done in %s", time.Since(ovsStart))
 
 	// close mgnt network
 	if t.mgntNet != nil {
+		t.logger.Info("Close: closing mgnt network")
+		mgntStart := time.Now()
 		if err := t.mgntNet.Close(); err != nil {
 			t.logger.Warnf("Error when closing mgnt network: %v", err)
 		}
 		t.mgntNet = nil
+		t.logger.Infof("Close: mgnt network done in %s", time.Since(mgntStart))
 	}
 
+	t.logger.Infof("Close: total done in %s", time.Since(closeStart))
 	return nil
 }
 
