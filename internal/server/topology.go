@@ -268,6 +268,7 @@ type NetemTopologyManager struct {
 	mgntNet     *MgntNetwork
 	running     bool
 	logger      *logrus.Entry
+	linkMu      sync.Mutex
 }
 
 func (t *NetemTopologyManager) Check() error {
@@ -810,6 +811,9 @@ func (t *NetemTopologyManager) GetLink(peer1V string, peer2V string) (*NetemLink
 }
 
 func (t *NetemTopologyManager) LinkAdd(linkCfg LinkConfig, sync bool) error {
+	t.linkMu.Lock()
+	defer t.linkMu.Unlock()
+
 	_, _, err := t.GetLink(linkCfg.Peer1, linkCfg.Peer2)
 	if err == nil {
 		return fmt.Errorf("this link already exist")
@@ -854,6 +858,9 @@ func (t *NetemTopologyManager) LinkAdd(linkCfg LinkConfig, sync bool) error {
 }
 
 func (t *NetemTopologyManager) LinkDel(linkCfg LinkConfig, sync bool) error {
+	t.linkMu.Lock()
+	defer t.linkMu.Unlock()
+
 	l, idx, err := t.GetLink(linkCfg.Peer1, linkCfg.Peer2)
 	if err != nil {
 		return err
@@ -878,6 +885,9 @@ func (t *NetemTopologyManager) LinkDel(linkCfg LinkConfig, sync bool) error {
 }
 
 func (t *NetemTopologyManager) LinkUpdate(linkCfg LinkConfig, sync bool) error {
+	t.linkMu.Lock()
+	defer t.linkMu.Unlock()
+
 	l, _, err := t.GetLink(linkCfg.Peer1, linkCfg.Peer2)
 	if err != nil {
 		return err
