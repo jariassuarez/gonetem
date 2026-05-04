@@ -162,8 +162,9 @@ definition requires the following parameters:
   * ``loss`` (float, optional): bidirectionnal loss on the link in percent (between 0.0 and 100.0)
   * ``rate`` (int, optional): bidirectionnal link rate in kbits per second
   * ``buffer`` (float, optional): bidirectionnal buffer size (equivalent to ``limit`` param in the ``tc`` command). The value has to be set in BDP (Bandwith Delay Product) scale factor (1.0 per default).
-  * ``peer1qos``: optional section to configure link QoS in the direction peer1 --> peer2. This section accept the same parameters than global configuration (ie. delay/jitter/loss/rate/buffer)
-  * ``peer2qos``: optional section to configure link QoS in the direction peer2 --> peer1. This section accept the same parameters than global configuration (ie. delay/jitter/loss/rate/buffer)
+  * ``burst`` (int, optional): bidirectionnal burst size in bytes. If not set, a default value based on the rate is used.
+  * ``peer1qos``: optional section to configure link QoS in the direction peer1 --> peer2. This section accept the same parameters than global configuration (ie. delay/jitter/loss/rate/buffer/burst)
+  * ``peer2qos``: optional section to configure link QoS in the direction peer2 --> peer1. This section accept the same parameters than global configuration (ie. delay/jitter/loss/rate/buffer/burst)
 
 Example of links with same QoS in the two directions
 """"""""""""""""""""""""""""""""""""""""""""""""""""

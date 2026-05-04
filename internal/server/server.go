@@ -28,11 +28,17 @@ func getLinkConfigFromRequest(request *proto.LinkRequest) LinkConfig {
 			Loss:   float64(rLink.Peer1Qos.Loss),
 			Delay:  int(rLink.Peer1Qos.Delay),
 			Jitter: int(rLink.Peer1Qos.Jitter),
+			Rate:   int(rLink.Peer1Qos.Rate),
+			Buffer: float64(rLink.Peer1Qos.Buffer),
+			Burst:  int(rLink.Peer1Qos.Burst),
 		},
 		Peer2QoS: QoSConfig{
 			Loss:   float64(rLink.Peer2Qos.Loss),
 			Delay:  int(rLink.Peer2Qos.Delay),
 			Jitter: int(rLink.Peer2Qos.Jitter),
+			Rate:   int(rLink.Peer2Qos.Rate),
+			Buffer: float64(rLink.Peer2Qos.Buffer),
+			Burst:  int(rLink.Peer2Qos.Burst),
 		},
 	}
 }

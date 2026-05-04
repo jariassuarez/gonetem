@@ -190,6 +190,7 @@ message LinkConfig {
         int32 jitter = 5;
         int32 rate = 6;
         float buffer = 7;
+        int32 burst = 8;
     }
 
     string peer1 = 1;

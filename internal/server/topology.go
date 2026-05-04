@@ -37,6 +37,7 @@ type QoSConfig struct {
 	Jitter int     `yaml:",omitempty"` // ms
 	Rate   int     `yaml:",omitempty"` // kbps
 	Buffer float64 `yaml:",omitempty"` // BDP scale factor
+	Burst  int     `yaml:",omitempty"` // bytes
 }
 
 type LinkConfig struct {
@@ -47,6 +48,7 @@ type LinkConfig struct {
 	Jitter   int     `yaml:",omitempty"` // ms
 	Rate     int     `yaml:",omitempty"` // kbps
 	Buffer   float64 `yaml:",omitempty"` // BDP scale factor
+	Burst    int     `yaml:",omitempty"` // bytes
 	Peer1QoS QoSConfig
 	Peer2QoS QoSConfig
 }
@@ -56,7 +58,8 @@ func (l *LinkConfig) GetPeer1QoS() QoSConfig {
 		l.Peer1QoS.Delay > 0 ||
 		l.Peer1QoS.Jitter > 0 ||
 		l.Peer1QoS.Rate > 0 ||
-		l.Peer1QoS.Buffer > 0 {
+		l.Peer1QoS.Buffer > 0 ||
+		l.Peer1QoS.Burst > 0 {
 		return l.Peer1QoS
 	}
 
@@ -66,6 +69,7 @@ func (l *LinkConfig) GetPeer1QoS() QoSConfig {
 		Jitter: l.Jitter,
 		Rate:   l.Rate,
 		Buffer: l.Buffer,
+		Burst:  l.Burst,
 	}
 }
 
@@ -74,7 +78,8 @@ func (l *LinkConfig) GetPeer2QoS() QoSConfig {
 		l.Peer2QoS.Delay > 0 ||
 		l.Peer2QoS.Jitter > 0 ||
 		l.Peer2QoS.Rate > 0 ||
-		l.Peer2QoS.Buffer > 0 {
+		l.Peer2QoS.Buffer > 0 ||
+		l.Peer2QoS.Burst > 0 {
 		return l.Peer2QoS
 	}
 
@@ -84,6 +89,7 @@ func (l *LinkConfig) GetPeer2QoS() QoSConfig {
 		Jitter: l.Jitter,
 		Rate:   l.Rate,
 		Buffer: l.Buffer,
+		Burst:  l.Burst,
 	}
 }
 
@@ -193,7 +199,7 @@ func (l *NetemLink) SetPeer1TBF(ifName string, ns netns.NsHandle) error {
 
 	// create tbf qdisc if necessary
 	if peerQoS.Rate > 0 {
-		if err := link.CreateTbf(ifName, ns, peerQoS.Delay+l.Config.Jitter, peerQoS.Rate, peerQoS.Buffer, l.HasPeer1Tbf); err != nil {
+		if err := link.CreateTbf(ifName, ns, peerQoS.Delay+l.Config.Jitter, peerQoS.Rate, peerQoS.Buffer, peerQoS.Burst, l.HasPeer1Tbf); err != nil {
 			return err
 		}
 		l.HasPeer1Tbf = true
@@ -207,7 +213,7 @@ func (l *NetemLink) SetPeer2TBF(ifName string, ns netns.NsHandle) error {
 
 	// create tbf qdisc if necessary
 	if peerQoS.Rate > 0 {
-		if err := link.CreateTbf(ifName, ns, peerQoS.Delay+l.Config.Jitter, peerQoS.Rate, peerQoS.Buffer, l.HasPeer2Tbf); err != nil {
+		if err := link.CreateTbf(ifName, ns, peerQoS.Delay+l.Config.Jitter, peerQoS.Rate, peerQoS.Buffer, peerQoS.Burst, l.HasPeer2Tbf); err != nil {
 			return err
 		}
 		l.HasPeer2Tbf = true
