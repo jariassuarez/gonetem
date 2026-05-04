@@ -743,19 +743,19 @@ func (t *NetemTopologyManager) setupLink(l *NetemLink, configure bool) error {
 		)
 	}
 
-	// create netem qdisc if necessary
-	if err := l.SetPeer1Netem(peer1IfName, peer1Netns); err != nil {
-		return err
-	}
-	if err := l.SetPeer2Netem(peer2IfName, peer2Netns); err != nil {
-		return err
-	}
-
 	// create tbf qdisc if necessary
 	if err := l.SetPeer1TBF(peer1IfName, peer1Netns); err != nil {
 		return err
 	}
 	if err := l.SetPeer2TBF(peer2IfName, peer2Netns); err != nil {
+		return err
+	}
+
+	// create netem qdisc if necessary
+	if err := l.SetPeer1Netem(peer1IfName, peer1Netns); err != nil {
+		return err
+	}
+	if err := l.SetPeer2Netem(peer2IfName, peer2Netns); err != nil {
 		return err
 	}
 
@@ -845,7 +845,7 @@ func (t *NetemTopologyManager) LinkAdd(linkCfg LinkConfig, sync bool) error {
 		HasPeer2Tbf:   false,
 		Config:        linkCfg,
 	}
-	if err := t.setupLink(link, true); err != nil {
+	if err := t.setupLink(link, false); err != nil {
 		return err
 	}
 
@@ -909,19 +909,19 @@ func (t *NetemTopologyManager) LinkUpdate(linkCfg LinkConfig, sync bool) error {
 	peer1IfName := l.Peer1.Node.GetInterfaceName(l.Peer1.IfIndex)
 	peer2IfName := l.Peer2.Node.GetInterfaceName(l.Peer2.IfIndex)
 
+	// create/update tbf qdisc if necessary
+	if err := l.SetPeer1TBF(peer1IfName, peer1Netns); err != nil {
+		return err
+	}
+	if err := l.SetPeer2TBF(peer2IfName, peer2Netns); err != nil {
+		return err
+	}
+
 	// create/update netem qdisc if necessary
 	if err := l.SetPeer1Netem(peer1IfName, peer1Netns); err != nil {
 		return err
 	}
 	if err := l.SetPeer2Netem(peer2IfName, peer2Netns); err != nil {
-		return err
-	}
-
-	// create tbf qdisc if necessary
-	if err := l.SetPeer1TBF(peer1IfName, peer1Netns); err != nil {
-		return err
-	}
-	if err := l.SetPeer2TBF(peer2IfName, peer2Netns); err != nil {
 		return err
 	}
 
