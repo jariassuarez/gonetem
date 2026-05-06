@@ -1,12 +1,15 @@
 package ovs
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -76,6 +79,40 @@ func (o *OvsNode) ExecCommand(
 		cmd, in, out,
 		tty, ttyHeight, ttyWidth,
 		resizeCh)
+}
+
+func (o *OvsNode) RunCommand(cmd []string) ([]byte, []byte, int, error) {
+	if !o.Running {
+		return nil, nil, -1, errors.New("not running")
+	}
+
+	client, err := docker.NewDockerClient()
+	if err != nil {
+		return nil, nil, -1, err
+	}
+	defer client.Close()
+
+	pid, err := client.Pid(context.Background(), o.OvsInstance.containerId)
+	if err != nil {
+		return nil, nil, -1, err
+	}
+
+	nsenterCmd := exec.Command("nsenter", append([]string{"-t", strconv.Itoa(pid), "-a", "--"}, cmd...)...)
+	var stdout, stderr bytes.Buffer
+	nsenterCmd.Stdout = &stdout
+	nsenterCmd.Stderr = &stderr
+	err = nsenterCmd.Run()
+
+	exitCode := 0
+	if err != nil {
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			exitCode = exitErr.ExitCode()
+		} else {
+			return nil, nil, -1, err
+		}
+	}
+
+	return stdout.Bytes(), stderr.Bytes(), exitCode, nil
 }
 
 func (o *OvsNode) GetConsoleCmd(shell bool) ([]string, error) {

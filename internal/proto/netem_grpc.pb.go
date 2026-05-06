@@ -45,6 +45,7 @@ const (
 	Netem_NodeCopyFrom_FullMethodName          = "/netem.Netem/NodeCopyFrom"
 	Netem_NodeCopyTo_FullMethodName            = "/netem.Netem/NodeCopyTo"
 	Netem_NodeGetConsoleCmd_FullMethodName     = "/netem.Netem/NodeGetConsoleCmd"
+	Netem_NodeRun_FullMethodName               = "/netem.Netem/NodeRun"
 	Netem_NodeExec_FullMethodName              = "/netem.Netem/NodeExec"
 	Netem_LinkUpdate_FullMethodName            = "/netem.Netem/LinkUpdate"
 	Netem_LinkAdd_FullMethodName               = "/netem.Netem/LinkAdd"
@@ -85,6 +86,7 @@ type NetemClient interface {
 	NodeCopyFrom(ctx context.Context, in *CopyMsg, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CopyMsg], error)
 	NodeCopyTo(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[CopyMsg, AckResponse], error)
 	NodeGetConsoleCmd(ctx context.Context, in *ConsoleCmdRequest, opts ...grpc.CallOption) (*ConsoleCmdResponse, error)
+	NodeRun(ctx context.Context, in *NodeRunRequest, opts ...grpc.CallOption) (*NodeRunResponse, error)
 	NodeExec(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ExecCltMsg, ExecSrvMsg], error)
 	// Link actions
 	LinkUpdate(ctx context.Context, in *LinkRequest, opts ...grpc.CallOption) (*AckResponse, error)
@@ -416,6 +418,16 @@ func (c *netemClient) NodeGetConsoleCmd(ctx context.Context, in *ConsoleCmdReque
 	return out, nil
 }
 
+func (c *netemClient) NodeRun(ctx context.Context, in *NodeRunRequest, opts ...grpc.CallOption) (*NodeRunResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(NodeRunResponse)
+	err := c.cc.Invoke(ctx, Netem_NodeRun_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *netemClient) NodeExec(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ExecCltMsg, ExecSrvMsg], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &Netem_ServiceDesc.Streams[8], Netem_NodeExec_FullMethodName, cOpts...)
@@ -493,6 +505,7 @@ type NetemServer interface {
 	NodeCopyFrom(*CopyMsg, grpc.ServerStreamingServer[CopyMsg]) error
 	NodeCopyTo(grpc.ClientStreamingServer[CopyMsg, AckResponse]) error
 	NodeGetConsoleCmd(context.Context, *ConsoleCmdRequest) (*ConsoleCmdResponse, error)
+	NodeRun(context.Context, *NodeRunRequest) (*NodeRunResponse, error)
 	NodeExec(grpc.BidiStreamingServer[ExecCltMsg, ExecSrvMsg]) error
 	// Link actions
 	LinkUpdate(context.Context, *LinkRequest) (*AckResponse, error)
@@ -582,6 +595,9 @@ func (UnimplementedNetemServer) NodeCopyTo(grpc.ClientStreamingServer[CopyMsg, A
 }
 func (UnimplementedNetemServer) NodeGetConsoleCmd(context.Context, *ConsoleCmdRequest) (*ConsoleCmdResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method NodeGetConsoleCmd not implemented")
+}
+func (UnimplementedNetemServer) NodeRun(context.Context, *NodeRunRequest) (*NodeRunResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method NodeRun not implemented")
 }
 func (UnimplementedNetemServer) NodeExec(grpc.BidiStreamingServer[ExecCltMsg, ExecSrvMsg]) error {
 	return status.Error(codes.Unimplemented, "method NodeExec not implemented")
@@ -1006,6 +1022,24 @@ func _Netem_NodeGetConsoleCmd_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Netem_NodeRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NodeRunRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NetemServer).NodeRun(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Netem_NodeRun_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NetemServer).NodeRun(ctx, req.(*NodeRunRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Netem_NodeExec_Handler(srv interface{}, stream grpc.ServerStream) error {
 	return srv.(NetemServer).NodeExec(&grpc.GenericServerStream[ExecCltMsg, ExecSrvMsg]{ServerStream: stream})
 }
@@ -1141,6 +1175,10 @@ var Netem_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "NodeGetConsoleCmd",
 			Handler:    _Netem_NodeGetConsoleCmd_Handler,
+		},
+		{
+			MethodName: "NodeRun",
+			Handler:    _Netem_NodeRun_Handler,
 		},
 		{
 			MethodName: "LinkUpdate",

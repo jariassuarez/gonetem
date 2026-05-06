@@ -1,14 +1,17 @@
 package docker
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -306,6 +309,40 @@ func (n *DockerNode) ExecCommand(
 		cmd, in, out,
 		tty, ttyHeight, ttyWidth,
 		resizeCh)
+}
+
+func (n *DockerNode) RunCommand(cmd []string) ([]byte, []byte, int, error) {
+	if !n.Running {
+		return nil, nil, -1, errors.New("not running")
+	}
+
+	client, err := NewDockerClient()
+	if err != nil {
+		return nil, nil, -1, err
+	}
+	defer client.Close()
+
+	pid, err := client.Pid(context.Background(), n.ID)
+	if err != nil {
+		return nil, nil, -1, err
+	}
+
+	nsenterCmd := exec.Command("nsenter", append([]string{"-t", strconv.Itoa(pid), "-a", "--"}, cmd...)...)
+	var stdout, stderr bytes.Buffer
+	nsenterCmd.Stdout = &stdout
+	nsenterCmd.Stderr = &stderr
+	err = nsenterCmd.Run()
+
+	exitCode := 0
+	if err != nil {
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			exitCode = exitErr.ExitCode()
+		} else {
+			return nil, nil, -1, err
+		}
+	}
+
+	return stdout.Bytes(), stderr.Bytes(), exitCode, nil
 }
 
 func (n *DockerNode) GetConsoleCmd(shell bool) ([]string, error) {

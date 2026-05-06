@@ -899,6 +899,40 @@ func (s *netemServer) NodeGetConsoleCmd(ctx context.Context, request *proto.Cons
 	}, nil
 }
 
+func (s *netemServer) NodeRun(ctx context.Context, request *proto.NodeRunRequest) (*proto.NodeRunResponse, error) {
+	// get project
+	project := ProjectGetOne(request.GetPrjId())
+	if project == nil {
+		return nil, &ProjectNotFoundError{request.GetPrjId()}
+	}
+
+	// get node
+	node := project.Topology.GetNode(request.GetNode())
+	if node == nil {
+		return nil, &NodeNotFoundError{
+			prjId: request.GetPrjId(),
+			name:  request.GetNode(),
+		}
+	}
+
+	stdout, stderr, exitCode, err := node.RunCommand(request.GetCmd())
+	if err != nil {
+		return &proto.NodeRunResponse{
+			Status: &proto.Status{
+				Code:  proto.StatusCode_ERROR,
+				Error: err.Error(),
+			},
+		}, nil
+	}
+
+	return &proto.NodeRunResponse{
+		Status:   &proto.Status{Code: proto.StatusCode_OK},
+		Stdout:   stdout,
+		Stderr:   stderr,
+		ExitCode: int32(exitCode),
+	}, nil
+}
+
 func (s *netemServer) NodeCopyFrom(request *proto.CopyMsg, stream proto.Netem_NodeCopyFromServer) error {
 	// get project
 	project := ProjectGetOne(request.GetPrjId())

@@ -585,7 +585,7 @@ func (x ConfigFilesResponse_Source) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ConfigFilesResponse_Source.Descriptor instead.
 func (ConfigFilesResponse_Source) EnumDescriptor() ([]byte, []int) {
-	return file_internal_proto_netem_proto_rawDescGZIP(), []int{23, 0}
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{25, 0}
 }
 
 type ExecCltMsg struct {
@@ -1868,6 +1868,134 @@ func (x *ConsoleCmdResponse) GetCmd() []string {
 	return nil
 }
 
+type NodeRunRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PrjId         string                 `protobuf:"bytes,1,opt,name=prjId,proto3" json:"prjId,omitempty"`
+	Node          string                 `protobuf:"bytes,2,opt,name=node,proto3" json:"node,omitempty"`
+	Cmd           []string               `protobuf:"bytes,3,rep,name=cmd,proto3" json:"cmd,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NodeRunRequest) Reset() {
+	*x = NodeRunRequest{}
+	mi := &file_internal_proto_netem_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NodeRunRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NodeRunRequest) ProtoMessage() {}
+
+func (x *NodeRunRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_proto_netem_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NodeRunRequest.ProtoReflect.Descriptor instead.
+func (*NodeRunRequest) Descriptor() ([]byte, []int) {
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *NodeRunRequest) GetPrjId() string {
+	if x != nil {
+		return x.PrjId
+	}
+	return ""
+}
+
+func (x *NodeRunRequest) GetNode() string {
+	if x != nil {
+		return x.Node
+	}
+	return ""
+}
+
+func (x *NodeRunRequest) GetCmd() []string {
+	if x != nil {
+		return x.Cmd
+	}
+	return nil
+}
+
+type NodeRunResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        *Status                `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
+	Stdout        []byte                 `protobuf:"bytes,2,opt,name=stdout,proto3" json:"stdout,omitempty"`
+	Stderr        []byte                 `protobuf:"bytes,3,opt,name=stderr,proto3" json:"stderr,omitempty"`
+	ExitCode      int32                  `protobuf:"varint,4,opt,name=exitCode,proto3" json:"exitCode,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *NodeRunResponse) Reset() {
+	*x = NodeRunResponse{}
+	mi := &file_internal_proto_netem_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NodeRunResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NodeRunResponse) ProtoMessage() {}
+
+func (x *NodeRunResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_internal_proto_netem_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NodeRunResponse.ProtoReflect.Descriptor instead.
+func (*NodeRunResponse) Descriptor() ([]byte, []int) {
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *NodeRunResponse) GetStatus() *Status {
+	if x != nil {
+		return x.Status
+	}
+	return nil
+}
+
+func (x *NodeRunResponse) GetStdout() []byte {
+	if x != nil {
+		return x.Stdout
+	}
+	return nil
+}
+
+func (x *NodeRunResponse) GetStderr() []byte {
+	if x != nil {
+		return x.Stderr
+	}
+	return nil
+}
+
+func (x *NodeRunResponse) GetExitCode() int32 {
+	if x != nil {
+		return x.ExitCode
+	}
+	return 0
+}
+
 type StatusResponse struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
 	Status        *Status                      `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
@@ -1882,7 +2010,7 @@ type StatusResponse struct {
 
 func (x *StatusResponse) Reset() {
 	*x = StatusResponse{}
-	mi := &file_internal_proto_netem_proto_msgTypes[22]
+	mi := &file_internal_proto_netem_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1894,7 +2022,7 @@ func (x *StatusResponse) String() string {
 func (*StatusResponse) ProtoMessage() {}
 
 func (x *StatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[22]
+	mi := &file_internal_proto_netem_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1907,7 +2035,7 @@ func (x *StatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatusResponse.ProtoReflect.Descriptor instead.
 func (*StatusResponse) Descriptor() ([]byte, []int) {
-	return file_internal_proto_netem_proto_rawDescGZIP(), []int{22}
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *StatusResponse) GetStatus() *Status {
@@ -1963,7 +2091,7 @@ type ConfigFilesResponse struct {
 
 func (x *ConfigFilesResponse) Reset() {
 	*x = ConfigFilesResponse{}
-	mi := &file_internal_proto_netem_proto_msgTypes[23]
+	mi := &file_internal_proto_netem_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1975,7 +2103,7 @@ func (x *ConfigFilesResponse) String() string {
 func (*ConfigFilesResponse) ProtoMessage() {}
 
 func (x *ConfigFilesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[23]
+	mi := &file_internal_proto_netem_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1988,7 +2116,7 @@ func (x *ConfigFilesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfigFilesResponse.ProtoReflect.Descriptor instead.
 func (*ConfigFilesResponse) Descriptor() ([]byte, []int) {
-	return file_internal_proto_netem_proto_rawDescGZIP(), []int{23}
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *ConfigFilesResponse) GetStatus() *Status {
@@ -2022,7 +2150,7 @@ type PrjListResponse struct {
 
 func (x *PrjListResponse) Reset() {
 	*x = PrjListResponse{}
-	mi := &file_internal_proto_netem_proto_msgTypes[24]
+	mi := &file_internal_proto_netem_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2034,7 +2162,7 @@ func (x *PrjListResponse) String() string {
 func (*PrjListResponse) ProtoMessage() {}
 
 func (x *PrjListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[24]
+	mi := &file_internal_proto_netem_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2047,7 +2175,7 @@ func (x *PrjListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PrjListResponse.ProtoReflect.Descriptor instead.
 func (*PrjListResponse) Descriptor() ([]byte, []int) {
-	return file_internal_proto_netem_proto_rawDescGZIP(), []int{24}
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *PrjListResponse) GetStatus() *Status {
@@ -2074,7 +2202,7 @@ type PrjOpenResponse struct {
 
 func (x *PrjOpenResponse) Reset() {
 	*x = PrjOpenResponse{}
-	mi := &file_internal_proto_netem_proto_msgTypes[25]
+	mi := &file_internal_proto_netem_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2086,7 +2214,7 @@ func (x *PrjOpenResponse) String() string {
 func (*PrjOpenResponse) ProtoMessage() {}
 
 func (x *PrjOpenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[25]
+	mi := &file_internal_proto_netem_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2099,7 +2227,7 @@ func (x *PrjOpenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PrjOpenResponse.ProtoReflect.Descriptor instead.
 func (*PrjOpenResponse) Descriptor() ([]byte, []int) {
-	return file_internal_proto_netem_proto_rawDescGZIP(), []int{25}
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *PrjOpenResponse) GetStatus() *Status {
@@ -2126,7 +2254,7 @@ type TopologyRunMsg_NodeMessages struct {
 
 func (x *TopologyRunMsg_NodeMessages) Reset() {
 	*x = TopologyRunMsg_NodeMessages{}
-	mi := &file_internal_proto_netem_proto_msgTypes[26]
+	mi := &file_internal_proto_netem_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2138,7 +2266,7 @@ func (x *TopologyRunMsg_NodeMessages) String() string {
 func (*TopologyRunMsg_NodeMessages) ProtoMessage() {}
 
 func (x *TopologyRunMsg_NodeMessages) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[26]
+	mi := &file_internal_proto_netem_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2182,7 +2310,7 @@ type LinkConfig_QoSConfig struct {
 
 func (x *LinkConfig_QoSConfig) Reset() {
 	*x = LinkConfig_QoSConfig{}
-	mi := &file_internal_proto_netem_proto_msgTypes[27]
+	mi := &file_internal_proto_netem_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2194,7 +2322,7 @@ func (x *LinkConfig_QoSConfig) String() string {
 func (*LinkConfig_QoSConfig) ProtoMessage() {}
 
 func (x *LinkConfig_QoSConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[27]
+	mi := &file_internal_proto_netem_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2262,7 +2390,7 @@ type StatusResponse_IfStatus struct {
 
 func (x *StatusResponse_IfStatus) Reset() {
 	*x = StatusResponse_IfStatus{}
-	mi := &file_internal_proto_netem_proto_msgTypes[28]
+	mi := &file_internal_proto_netem_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2274,7 +2402,7 @@ func (x *StatusResponse_IfStatus) String() string {
 func (*StatusResponse_IfStatus) ProtoMessage() {}
 
 func (x *StatusResponse_IfStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[28]
+	mi := &file_internal_proto_netem_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2287,7 +2415,7 @@ func (x *StatusResponse_IfStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatusResponse_IfStatus.ProtoReflect.Descriptor instead.
 func (*StatusResponse_IfStatus) Descriptor() ([]byte, []int) {
-	return file_internal_proto_netem_proto_rawDescGZIP(), []int{22, 0}
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{24, 0}
 }
 
 func (x *StatusResponse_IfStatus) GetName() string {
@@ -2315,7 +2443,7 @@ type StatusResponse_NodeStatus struct {
 
 func (x *StatusResponse_NodeStatus) Reset() {
 	*x = StatusResponse_NodeStatus{}
-	mi := &file_internal_proto_netem_proto_msgTypes[29]
+	mi := &file_internal_proto_netem_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2327,7 +2455,7 @@ func (x *StatusResponse_NodeStatus) String() string {
 func (*StatusResponse_NodeStatus) ProtoMessage() {}
 
 func (x *StatusResponse_NodeStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[29]
+	mi := &file_internal_proto_netem_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2340,7 +2468,7 @@ func (x *StatusResponse_NodeStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatusResponse_NodeStatus.ProtoReflect.Descriptor instead.
 func (*StatusResponse_NodeStatus) Descriptor() ([]byte, []int) {
-	return file_internal_proto_netem_proto_rawDescGZIP(), []int{22, 1}
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{24, 1}
 }
 
 func (x *StatusResponse_NodeStatus) GetName() string {
@@ -2374,7 +2502,7 @@ type ConfigFilesResponse_ConfigFile struct {
 
 func (x *ConfigFilesResponse_ConfigFile) Reset() {
 	*x = ConfigFilesResponse_ConfigFile{}
-	mi := &file_internal_proto_netem_proto_msgTypes[30]
+	mi := &file_internal_proto_netem_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2386,7 +2514,7 @@ func (x *ConfigFilesResponse_ConfigFile) String() string {
 func (*ConfigFilesResponse_ConfigFile) ProtoMessage() {}
 
 func (x *ConfigFilesResponse_ConfigFile) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[30]
+	mi := &file_internal_proto_netem_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2399,7 +2527,7 @@ func (x *ConfigFilesResponse_ConfigFile) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfigFilesResponse_ConfigFile.ProtoReflect.Descriptor instead.
 func (*ConfigFilesResponse_ConfigFile) Descriptor() ([]byte, []int) {
-	return file_internal_proto_netem_proto_rawDescGZIP(), []int{23, 0}
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{25, 0}
 }
 
 func (x *ConfigFilesResponse_ConfigFile) GetName() string {
@@ -2427,7 +2555,7 @@ type PrjListResponse_Info struct {
 
 func (x *PrjListResponse_Info) Reset() {
 	*x = PrjListResponse_Info{}
-	mi := &file_internal_proto_netem_proto_msgTypes[31]
+	mi := &file_internal_proto_netem_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2439,7 +2567,7 @@ func (x *PrjListResponse_Info) String() string {
 func (*PrjListResponse_Info) ProtoMessage() {}
 
 func (x *PrjListResponse_Info) ProtoReflect() protoreflect.Message {
-	mi := &file_internal_proto_netem_proto_msgTypes[31]
+	mi := &file_internal_proto_netem_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2452,7 +2580,7 @@ func (x *PrjListResponse_Info) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PrjListResponse_Info.ProtoReflect.Descriptor instead.
 func (*PrjListResponse_Info) Descriptor() ([]byte, []int) {
-	return file_internal_proto_netem_proto_rawDescGZIP(), []int{24, 0}
+	return file_internal_proto_netem_proto_rawDescGZIP(), []int{26, 0}
 }
 
 func (x *PrjListResponse_Info) GetId() string {
@@ -2633,7 +2761,16 @@ const file_internal_proto_netem_proto_rawDesc = "" +
 	"\aversion\x18\x02 \x01(\tR\aversion\"M\n" +
 	"\x12ConsoleCmdResponse\x12%\n" +
 	"\x06status\x18\x01 \x01(\v2\r.netem.StatusR\x06status\x12\x10\n" +
-	"\x03cmd\x18\x02 \x03(\tR\x03cmd\"\x87\x03\n" +
+	"\x03cmd\x18\x02 \x03(\tR\x03cmd\"L\n" +
+	"\x0eNodeRunRequest\x12\x14\n" +
+	"\x05prjId\x18\x01 \x01(\tR\x05prjId\x12\x12\n" +
+	"\x04node\x18\x02 \x01(\tR\x04node\x12\x10\n" +
+	"\x03cmd\x18\x03 \x03(\tR\x03cmd\"\x84\x01\n" +
+	"\x0fNodeRunResponse\x12%\n" +
+	"\x06status\x18\x01 \x01(\v2\r.netem.StatusR\x06status\x12\x16\n" +
+	"\x06stdout\x18\x02 \x01(\fR\x06stdout\x12\x16\n" +
+	"\x06stderr\x18\x03 \x01(\fR\x06stderr\x12\x1a\n" +
+	"\bexitCode\x18\x04 \x01(\x05R\bexitCode\"\x87\x03\n" +
 	"\x0eStatusResponse\x12%\n" +
 	"\x06status\x18\x01 \x01(\v2\r.netem.StatusR\x06status\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x0e\n" +
@@ -2680,7 +2817,7 @@ const file_internal_proto_netem_proto_rawDesc = "" +
 	"\x05ERROR\x10\x01*\x1b\n" +
 	"\aIfState\x12\x06\n" +
 	"\x02UP\x10\x00\x12\b\n" +
-	"\x04DOWN\x10\x012\xb6\x0e\n" +
+	"\x04DOWN\x10\x012\xf2\x0e\n" +
 	"\x05Netem\x12D\n" +
 	"\x10ServerGetVersion\x12\x16.google.protobuf.Empty\x1a\x16.netem.VersionResponse\"\x00\x12A\n" +
 	"\x10ServerPullImages\x12\x16.google.protobuf.Empty\x1a\x11.netem.PullSrvMsg\"\x000\x01\x12E\n" +
@@ -2707,7 +2844,8 @@ const file_internal_proto_netem_proto_rawDesc = "" +
 	"\fNodeCopyFrom\x12\x0e.netem.CopyMsg\x1a\x0e.netem.CopyMsg\"\x000\x01\x124\n" +
 	"\n" +
 	"NodeCopyTo\x12\x0e.netem.CopyMsg\x1a\x12.netem.AckResponse\"\x00(\x01\x12J\n" +
-	"\x11NodeGetConsoleCmd\x12\x18.netem.ConsoleCmdRequest\x1a\x19.netem.ConsoleCmdResponse\"\x00\x126\n" +
+	"\x11NodeGetConsoleCmd\x12\x18.netem.ConsoleCmdRequest\x1a\x19.netem.ConsoleCmdResponse\"\x00\x12:\n" +
+	"\aNodeRun\x12\x15.netem.NodeRunRequest\x1a\x16.netem.NodeRunResponse\"\x00\x126\n" +
 	"\bNodeExec\x12\x11.netem.ExecCltMsg\x1a\x11.netem.ExecSrvMsg\"\x00(\x010\x01\x126\n" +
 	"\n" +
 	"LinkUpdate\x12\x12.netem.LinkRequest\x1a\x12.netem.AckResponse\"\x00\x123\n" +
@@ -2727,7 +2865,7 @@ func file_internal_proto_netem_proto_rawDescGZIP() []byte {
 }
 
 var file_internal_proto_netem_proto_enumTypes = make([]protoimpl.EnumInfo, 11)
-var file_internal_proto_netem_proto_msgTypes = make([]protoimpl.MessageInfo, 32)
+var file_internal_proto_netem_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
 var file_internal_proto_netem_proto_goTypes = []any{
 	(StatusCode)(0),                        // 0: netem.StatusCode
 	(IfState)(0),                           // 1: netem.IfState
@@ -2762,17 +2900,19 @@ var file_internal_proto_netem_proto_goTypes = []any{
 	(*FileResponse)(nil),                   // 30: netem.FileResponse
 	(*VersionResponse)(nil),                // 31: netem.VersionResponse
 	(*ConsoleCmdResponse)(nil),             // 32: netem.ConsoleCmdResponse
-	(*StatusResponse)(nil),                 // 33: netem.StatusResponse
-	(*ConfigFilesResponse)(nil),            // 34: netem.ConfigFilesResponse
-	(*PrjListResponse)(nil),                // 35: netem.PrjListResponse
-	(*PrjOpenResponse)(nil),                // 36: netem.PrjOpenResponse
-	(*TopologyRunMsg_NodeMessages)(nil),    // 37: netem.TopologyRunMsg.NodeMessages
-	(*LinkConfig_QoSConfig)(nil),           // 38: netem.LinkConfig.QoSConfig
-	(*StatusResponse_IfStatus)(nil),        // 39: netem.StatusResponse.IfStatus
-	(*StatusResponse_NodeStatus)(nil),      // 40: netem.StatusResponse.NodeStatus
-	(*ConfigFilesResponse_ConfigFile)(nil), // 41: netem.ConfigFilesResponse.ConfigFile
-	(*PrjListResponse_Info)(nil),           // 42: netem.PrjListResponse.Info
-	(*empty.Empty)(nil),                    // 43: google.protobuf.Empty
+	(*NodeRunRequest)(nil),                 // 33: netem.NodeRunRequest
+	(*NodeRunResponse)(nil),                // 34: netem.NodeRunResponse
+	(*StatusResponse)(nil),                 // 35: netem.StatusResponse
+	(*ConfigFilesResponse)(nil),            // 36: netem.ConfigFilesResponse
+	(*PrjListResponse)(nil),                // 37: netem.PrjListResponse
+	(*PrjOpenResponse)(nil),                // 38: netem.PrjOpenResponse
+	(*TopologyRunMsg_NodeMessages)(nil),    // 39: netem.TopologyRunMsg.NodeMessages
+	(*LinkConfig_QoSConfig)(nil),           // 40: netem.LinkConfig.QoSConfig
+	(*StatusResponse_IfStatus)(nil),        // 41: netem.StatusResponse.IfStatus
+	(*StatusResponse_NodeStatus)(nil),      // 42: netem.StatusResponse.NodeStatus
+	(*ConfigFilesResponse_ConfigFile)(nil), // 43: netem.ConfigFilesResponse.ConfigFile
+	(*PrjListResponse_Info)(nil),           // 44: netem.PrjListResponse.Info
+	(*empty.Empty)(nil),                    // 45: google.protobuf.Empty
 }
 var file_internal_proto_netem_proto_depIdxs = []int32{
 	2,  // 0: netem.ExecCltMsg.code:type_name -> netem.ExecCltMsg.Code
@@ -2781,11 +2921,11 @@ var file_internal_proto_netem_proto_depIdxs = []int32{
 	5,  // 3: netem.PullSrvMsg.code:type_name -> netem.PullSrvMsg.Code
 	6,  // 4: netem.CaptureSrvMsg.code:type_name -> netem.CaptureSrvMsg.Code
 	7,  // 5: netem.TopologyRunMsg.code:type_name -> netem.TopologyRunMsg.Code
-	37, // 6: netem.TopologyRunMsg.nodeMessages:type_name -> netem.TopologyRunMsg.NodeMessages
+	39, // 6: netem.TopologyRunMsg.nodeMessages:type_name -> netem.TopologyRunMsg.NodeMessages
 	8,  // 7: netem.ProjectSaveMsg.code:type_name -> netem.ProjectSaveMsg.Code
 	9,  // 8: netem.ProjectCloseMsg.code:type_name -> netem.ProjectCloseMsg.Code
-	38, // 9: netem.LinkConfig.peer1qos:type_name -> netem.LinkConfig.QoSConfig
-	38, // 10: netem.LinkConfig.peer2qos:type_name -> netem.LinkConfig.QoSConfig
+	40, // 9: netem.LinkConfig.peer1qos:type_name -> netem.LinkConfig.QoSConfig
+	40, // 10: netem.LinkConfig.peer2qos:type_name -> netem.LinkConfig.QoSConfig
 	19, // 11: netem.LinkRequest.link:type_name -> netem.LinkConfig
 	1,  // 12: netem.NodeIfStateRequest.state:type_name -> netem.IfState
 	0,  // 13: netem.Status.code:type_name -> netem.StatusCode
@@ -2793,79 +2933,82 @@ var file_internal_proto_netem_proto_depIdxs = []int32{
 	28, // 15: netem.FileResponse.status:type_name -> netem.Status
 	28, // 16: netem.VersionResponse.status:type_name -> netem.Status
 	28, // 17: netem.ConsoleCmdResponse.status:type_name -> netem.Status
-	28, // 18: netem.StatusResponse.status:type_name -> netem.Status
-	40, // 19: netem.StatusResponse.nodes:type_name -> netem.StatusResponse.NodeStatus
-	28, // 20: netem.ConfigFilesResponse.status:type_name -> netem.Status
-	10, // 21: netem.ConfigFilesResponse.source:type_name -> netem.ConfigFilesResponse.Source
-	41, // 22: netem.ConfigFilesResponse.files:type_name -> netem.ConfigFilesResponse.ConfigFile
-	28, // 23: netem.PrjListResponse.status:type_name -> netem.Status
-	42, // 24: netem.PrjListResponse.projects:type_name -> netem.PrjListResponse.Info
-	28, // 25: netem.PrjOpenResponse.status:type_name -> netem.Status
-	1,  // 26: netem.StatusResponse.IfStatus.state:type_name -> netem.IfState
-	39, // 27: netem.StatusResponse.NodeStatus.interfaces:type_name -> netem.StatusResponse.IfStatus
-	43, // 28: netem.Netem.ServerGetVersion:input_type -> google.protobuf.Empty
-	43, // 29: netem.Netem.ServerPullImages:input_type -> google.protobuf.Empty
-	43, // 30: netem.Netem.ServerCleanContainers:input_type -> google.protobuf.Empty
-	43, // 31: netem.Netem.ProjectGetMany:input_type -> google.protobuf.Empty
-	27, // 32: netem.Netem.ProjectOpen:input_type -> netem.OpenRequest
-	25, // 33: netem.Netem.ProjectClose:input_type -> netem.ProjectRequest
-	25, // 34: netem.Netem.ProjectSave:input_type -> netem.ProjectRequest
-	25, // 35: netem.Netem.ProjectGetNodeConfigs:input_type -> netem.ProjectRequest
-	25, // 36: netem.Netem.ProjectGetStatus:input_type -> netem.ProjectRequest
-	25, // 37: netem.Netem.ReadNetworkFile:input_type -> netem.ProjectRequest
-	26, // 38: netem.Netem.WriteNetworkFile:input_type -> netem.WNetworkRequest
-	25, // 39: netem.Netem.TopologyCheck:input_type -> netem.ProjectRequest
-	25, // 40: netem.Netem.TopologyReload:input_type -> netem.ProjectRequest
-	25, // 41: netem.Netem.TopologyRun:input_type -> netem.ProjectRequest
-	25, // 42: netem.Netem.TopologyStartAll:input_type -> netem.ProjectRequest
-	25, // 43: netem.Netem.TopologyStopAll:input_type -> netem.ProjectRequest
-	23, // 44: netem.Netem.NodeReadConfigFiles:input_type -> netem.NodeRequest
-	23, // 45: netem.Netem.NodeStart:input_type -> netem.NodeRequest
-	23, // 46: netem.Netem.NodeStop:input_type -> netem.NodeRequest
-	23, // 47: netem.Netem.NodeRestart:input_type -> netem.NodeRequest
-	21, // 48: netem.Netem.NodeSetIfState:input_type -> netem.NodeIfStateRequest
-	22, // 49: netem.Netem.NodeCapture:input_type -> netem.NodeInterfaceRequest
-	13, // 50: netem.Netem.NodeCopyFrom:input_type -> netem.CopyMsg
-	13, // 51: netem.Netem.NodeCopyTo:input_type -> netem.CopyMsg
-	24, // 52: netem.Netem.NodeGetConsoleCmd:input_type -> netem.ConsoleCmdRequest
-	11, // 53: netem.Netem.NodeExec:input_type -> netem.ExecCltMsg
-	20, // 54: netem.Netem.LinkUpdate:input_type -> netem.LinkRequest
-	20, // 55: netem.Netem.LinkAdd:input_type -> netem.LinkRequest
-	20, // 56: netem.Netem.LinkDel:input_type -> netem.LinkRequest
-	31, // 57: netem.Netem.ServerGetVersion:output_type -> netem.VersionResponse
-	14, // 58: netem.Netem.ServerPullImages:output_type -> netem.PullSrvMsg
-	29, // 59: netem.Netem.ServerCleanContainers:output_type -> netem.AckResponse
-	35, // 60: netem.Netem.ProjectGetMany:output_type -> netem.PrjListResponse
-	36, // 61: netem.Netem.ProjectOpen:output_type -> netem.PrjOpenResponse
-	18, // 62: netem.Netem.ProjectClose:output_type -> netem.ProjectCloseMsg
-	17, // 63: netem.Netem.ProjectSave:output_type -> netem.ProjectSaveMsg
-	30, // 64: netem.Netem.ProjectGetNodeConfigs:output_type -> netem.FileResponse
-	33, // 65: netem.Netem.ProjectGetStatus:output_type -> netem.StatusResponse
-	30, // 66: netem.Netem.ReadNetworkFile:output_type -> netem.FileResponse
-	29, // 67: netem.Netem.WriteNetworkFile:output_type -> netem.AckResponse
-	29, // 68: netem.Netem.TopologyCheck:output_type -> netem.AckResponse
-	16, // 69: netem.Netem.TopologyReload:output_type -> netem.TopologyRunMsg
-	16, // 70: netem.Netem.TopologyRun:output_type -> netem.TopologyRunMsg
-	29, // 71: netem.Netem.TopologyStartAll:output_type -> netem.AckResponse
-	29, // 72: netem.Netem.TopologyStopAll:output_type -> netem.AckResponse
-	34, // 73: netem.Netem.NodeReadConfigFiles:output_type -> netem.ConfigFilesResponse
-	29, // 74: netem.Netem.NodeStart:output_type -> netem.AckResponse
-	29, // 75: netem.Netem.NodeStop:output_type -> netem.AckResponse
-	29, // 76: netem.Netem.NodeRestart:output_type -> netem.AckResponse
-	29, // 77: netem.Netem.NodeSetIfState:output_type -> netem.AckResponse
-	15, // 78: netem.Netem.NodeCapture:output_type -> netem.CaptureSrvMsg
-	13, // 79: netem.Netem.NodeCopyFrom:output_type -> netem.CopyMsg
-	29, // 80: netem.Netem.NodeCopyTo:output_type -> netem.AckResponse
-	32, // 81: netem.Netem.NodeGetConsoleCmd:output_type -> netem.ConsoleCmdResponse
-	12, // 82: netem.Netem.NodeExec:output_type -> netem.ExecSrvMsg
-	29, // 83: netem.Netem.LinkUpdate:output_type -> netem.AckResponse
-	29, // 84: netem.Netem.LinkAdd:output_type -> netem.AckResponse
-	29, // 85: netem.Netem.LinkDel:output_type -> netem.AckResponse
-	57, // [57:86] is the sub-list for method output_type
-	28, // [28:57] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	28, // 18: netem.NodeRunResponse.status:type_name -> netem.Status
+	28, // 19: netem.StatusResponse.status:type_name -> netem.Status
+	42, // 20: netem.StatusResponse.nodes:type_name -> netem.StatusResponse.NodeStatus
+	28, // 21: netem.ConfigFilesResponse.status:type_name -> netem.Status
+	10, // 22: netem.ConfigFilesResponse.source:type_name -> netem.ConfigFilesResponse.Source
+	43, // 23: netem.ConfigFilesResponse.files:type_name -> netem.ConfigFilesResponse.ConfigFile
+	28, // 24: netem.PrjListResponse.status:type_name -> netem.Status
+	44, // 25: netem.PrjListResponse.projects:type_name -> netem.PrjListResponse.Info
+	28, // 26: netem.PrjOpenResponse.status:type_name -> netem.Status
+	1,  // 27: netem.StatusResponse.IfStatus.state:type_name -> netem.IfState
+	41, // 28: netem.StatusResponse.NodeStatus.interfaces:type_name -> netem.StatusResponse.IfStatus
+	45, // 29: netem.Netem.ServerGetVersion:input_type -> google.protobuf.Empty
+	45, // 30: netem.Netem.ServerPullImages:input_type -> google.protobuf.Empty
+	45, // 31: netem.Netem.ServerCleanContainers:input_type -> google.protobuf.Empty
+	45, // 32: netem.Netem.ProjectGetMany:input_type -> google.protobuf.Empty
+	27, // 33: netem.Netem.ProjectOpen:input_type -> netem.OpenRequest
+	25, // 34: netem.Netem.ProjectClose:input_type -> netem.ProjectRequest
+	25, // 35: netem.Netem.ProjectSave:input_type -> netem.ProjectRequest
+	25, // 36: netem.Netem.ProjectGetNodeConfigs:input_type -> netem.ProjectRequest
+	25, // 37: netem.Netem.ProjectGetStatus:input_type -> netem.ProjectRequest
+	25, // 38: netem.Netem.ReadNetworkFile:input_type -> netem.ProjectRequest
+	26, // 39: netem.Netem.WriteNetworkFile:input_type -> netem.WNetworkRequest
+	25, // 40: netem.Netem.TopologyCheck:input_type -> netem.ProjectRequest
+	25, // 41: netem.Netem.TopologyReload:input_type -> netem.ProjectRequest
+	25, // 42: netem.Netem.TopologyRun:input_type -> netem.ProjectRequest
+	25, // 43: netem.Netem.TopologyStartAll:input_type -> netem.ProjectRequest
+	25, // 44: netem.Netem.TopologyStopAll:input_type -> netem.ProjectRequest
+	23, // 45: netem.Netem.NodeReadConfigFiles:input_type -> netem.NodeRequest
+	23, // 46: netem.Netem.NodeStart:input_type -> netem.NodeRequest
+	23, // 47: netem.Netem.NodeStop:input_type -> netem.NodeRequest
+	23, // 48: netem.Netem.NodeRestart:input_type -> netem.NodeRequest
+	21, // 49: netem.Netem.NodeSetIfState:input_type -> netem.NodeIfStateRequest
+	22, // 50: netem.Netem.NodeCapture:input_type -> netem.NodeInterfaceRequest
+	13, // 51: netem.Netem.NodeCopyFrom:input_type -> netem.CopyMsg
+	13, // 52: netem.Netem.NodeCopyTo:input_type -> netem.CopyMsg
+	24, // 53: netem.Netem.NodeGetConsoleCmd:input_type -> netem.ConsoleCmdRequest
+	33, // 54: netem.Netem.NodeRun:input_type -> netem.NodeRunRequest
+	11, // 55: netem.Netem.NodeExec:input_type -> netem.ExecCltMsg
+	20, // 56: netem.Netem.LinkUpdate:input_type -> netem.LinkRequest
+	20, // 57: netem.Netem.LinkAdd:input_type -> netem.LinkRequest
+	20, // 58: netem.Netem.LinkDel:input_type -> netem.LinkRequest
+	31, // 59: netem.Netem.ServerGetVersion:output_type -> netem.VersionResponse
+	14, // 60: netem.Netem.ServerPullImages:output_type -> netem.PullSrvMsg
+	29, // 61: netem.Netem.ServerCleanContainers:output_type -> netem.AckResponse
+	37, // 62: netem.Netem.ProjectGetMany:output_type -> netem.PrjListResponse
+	38, // 63: netem.Netem.ProjectOpen:output_type -> netem.PrjOpenResponse
+	18, // 64: netem.Netem.ProjectClose:output_type -> netem.ProjectCloseMsg
+	17, // 65: netem.Netem.ProjectSave:output_type -> netem.ProjectSaveMsg
+	30, // 66: netem.Netem.ProjectGetNodeConfigs:output_type -> netem.FileResponse
+	35, // 67: netem.Netem.ProjectGetStatus:output_type -> netem.StatusResponse
+	30, // 68: netem.Netem.ReadNetworkFile:output_type -> netem.FileResponse
+	29, // 69: netem.Netem.WriteNetworkFile:output_type -> netem.AckResponse
+	29, // 70: netem.Netem.TopologyCheck:output_type -> netem.AckResponse
+	16, // 71: netem.Netem.TopologyReload:output_type -> netem.TopologyRunMsg
+	16, // 72: netem.Netem.TopologyRun:output_type -> netem.TopologyRunMsg
+	29, // 73: netem.Netem.TopologyStartAll:output_type -> netem.AckResponse
+	29, // 74: netem.Netem.TopologyStopAll:output_type -> netem.AckResponse
+	36, // 75: netem.Netem.NodeReadConfigFiles:output_type -> netem.ConfigFilesResponse
+	29, // 76: netem.Netem.NodeStart:output_type -> netem.AckResponse
+	29, // 77: netem.Netem.NodeStop:output_type -> netem.AckResponse
+	29, // 78: netem.Netem.NodeRestart:output_type -> netem.AckResponse
+	29, // 79: netem.Netem.NodeSetIfState:output_type -> netem.AckResponse
+	15, // 80: netem.Netem.NodeCapture:output_type -> netem.CaptureSrvMsg
+	13, // 81: netem.Netem.NodeCopyFrom:output_type -> netem.CopyMsg
+	29, // 82: netem.Netem.NodeCopyTo:output_type -> netem.AckResponse
+	32, // 83: netem.Netem.NodeGetConsoleCmd:output_type -> netem.ConsoleCmdResponse
+	34, // 84: netem.Netem.NodeRun:output_type -> netem.NodeRunResponse
+	12, // 85: netem.Netem.NodeExec:output_type -> netem.ExecSrvMsg
+	29, // 86: netem.Netem.LinkUpdate:output_type -> netem.AckResponse
+	29, // 87: netem.Netem.LinkAdd:output_type -> netem.AckResponse
+	29, // 88: netem.Netem.LinkDel:output_type -> netem.AckResponse
+	59, // [59:89] is the sub-list for method output_type
+	29, // [29:59] is the sub-list for method input_type
+	29, // [29:29] is the sub-list for extension type_name
+	29, // [29:29] is the sub-list for extension extendee
+	0,  // [0:29] is the sub-list for field type_name
 }
 
 func init() { file_internal_proto_netem_proto_init() }
@@ -2879,7 +3022,7 @@ func file_internal_proto_netem_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_internal_proto_netem_proto_rawDesc), len(file_internal_proto_netem_proto_rawDesc)),
 			NumEnums:      11,
-			NumMessages:   32,
+			NumMessages:   34,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
